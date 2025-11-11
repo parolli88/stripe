@@ -1,7 +1,21 @@
 <?php
 declare(strict_types=1);
 
-require __DIR__ . '/../vendor/autoload.php';
+ini_set('display_errors', '0');
+ini_set('display_startup_errors', '0');
+
+$autoloadPath = __DIR__ . '/../vendor/autoload.php';
+
+if (!file_exists($autoloadPath)) {
+    header('Content-Type: application/json');
+    http_response_code(500);
+    echo json_encode([
+        'error' => 'Dependências ausentes. Execute "composer install" antes de tentar novamente.',
+    ]);
+    exit;
+}
+
+require $autoloadPath;
 
 use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
